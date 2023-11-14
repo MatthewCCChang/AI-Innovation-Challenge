@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="top-left-image">
+      <img src="logo.png" alt="Your Image Alt Text" />
+    </div>
+    <div class="center-text" id="initialText">
+      <p class="subtle-text">Tinder Club</p>
+    </div>
     <div class="chat-container" id="chatContainer">
       <div class="chat" id="chat">
         <!-- Chat messages will go here -->
@@ -16,6 +22,8 @@
           type="text"
           id="messageInput"
           placeholder="Type your message..."
+          oninput="handleInput(event)"
+          onkeydown="handleKeyPress(event)"
         />
         <button onclick="sendMessage()">Send</button>
       </div>

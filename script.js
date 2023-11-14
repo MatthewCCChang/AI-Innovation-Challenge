@@ -27,3 +27,24 @@ function sendMessage() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }, 500);
 }
+
+function handleInput() {
+    // Show or hide the initial text based on whether the input has text
+    //var initialText = document.getElementById("initialText");
+
+
+    return;
+}
+
+function handleKeyPress(event) {
+    // Check if the pressed key is Enter (key code 13)
+    if (event.key === "Enter") {
+        sendMessage(); // Call the sendMessage function when Enter is pressed
+        initialText.classList.remove("visible");
+        initialText.classList.add("hidden");
+
+        document.getElementById("chatContainer").style.height = "90%";
+
+        document.getElementById("messageInput").focus();
+    }
+}

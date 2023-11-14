@@ -1,27 +1,28 @@
 body {
     display: flex;
-    align-items: flex-end;
+    align-items: center; /* Change to center */
     justify-content: center;
     height: 100vh;
     margin: 0;
     padding: 0;
     background-color: white;
-    font-family: 'Arial', sans-serif; /* Change the font family */
-   
+    font-family: 'Arial', sans-serif;
     font-size: small;
 }
 
 .chat-container {
+    height: 40vh; /* Use viewport height */
     width: 80%;
     max-width: 800px;
-    margin-bottom: 5%;
+    margin: 0 5%; /* Center horizontally, no top margin, 5% bottom margin */
     background-color: white;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    margin-top: auto;
+    position: fixed;
+    bottom: 3%;
 }
 
 .chat {
@@ -56,3 +57,40 @@ button {
     background-color: #4caf50;
     color: white;
 }
+
+.center-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+#initialText.visible {
+    display: flex;
+}
+
+#initialText.hidden {
+    display: none;
+}
+.subtle-text {
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #888;
+    font-family: 'Arial', sans-serif; /* Change the font family if needed */
+}
+.top-left-image {
+    position: fixed;
+    top: 25px;
+    left: -10px;
+}
+
+.top-left-image img {
+    width: 300px; /* Adjust the width as needed */
+    height: auto; /* Maintain the aspect ratio */
+    border-radius: 50%; /* Optional: Add a border-radius for a circular image */
+}
+
+
