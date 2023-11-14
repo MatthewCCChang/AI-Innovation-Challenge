@@ -42,6 +42,7 @@ function handleKeyPress(event) {
         sendMessage(); // Call the sendMessage function when Enter is pressed
         initialText.classList.remove("visible");
         initialText.classList.add("hidden");
+        recommendations.classList.add("hidden");
 
         document.getElementById("chatContainer").style.height = "90%";
 
