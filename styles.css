@@ -12,6 +12,7 @@ body {
     color: white;
 }
 
+
 .chat-container {
     height: 40vh; /* Use viewport height */
     width: 80%;
@@ -84,6 +85,7 @@ button {
     cursor: pointer;
     background-color: #6A74A9;
     color: white;
+    bottom: 50%;
 }
 
 .recommendations {
@@ -122,8 +124,8 @@ button {
 }
 
 .subtle-text {
-    font-size: 24px;
-    letter-spacing: 2px;
+    font-size: 22px;
+    letter-spacing: 6px;
     color: #888;
     font-family: 'Arial', sans-serif; /* Change the font family if needed */
 }
