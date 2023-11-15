@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="top-left-image">
+    <div class="top-left-container">
       <img src="logo.png" alt="Your Image Alt Text" />
+      <button onclick="refreshPage()">Refresh</button>
     </div>
     <div class="center-text" id="initialText">
       <p class="subtle-text">Tinder Club</p>
@@ -25,7 +26,7 @@
           type="text"
           id="messageInput"
           placeholder="Type your message..."
-          oninput="handleInput(event)"
+          oninput="handleInput()"
           onkeydown="handleKeyPress(event)"
         />
         <button onclick="sendMessage()">Send</button>

@@ -33,6 +33,11 @@ body {
     overflow-y: scroll;
 }
 
+.chat-container {
+    /* ... other styles ... */
+    
+}
+
 .message {
     margin-bottom: 10px; /* Increase vertical spacing between messages */
 }
@@ -78,6 +83,7 @@ button {
     height: 100vh;
     margin: 0;
     padding: 0;
+    position: fixed;
     background-color: white;
 }
 
@@ -99,16 +105,24 @@ button {
     color: #888;
     font-family: 'Arial', sans-serif; /* Change the font family if needed */
 }
-.top-left-image {
+.top-left-container {
     position: fixed;
     top: 25px;
     left: -10px;
 }
 
-.top-left-image img {
+.top-left-container button {
+    display: flex;
+    justify-content: center;
+    width: 200px;
+    margin-top: 245%; 
+    margin-left: 40%;
+    letter-spacing: 2px;
+}
+
+.top-left-container img {
     width: 300px; /* Adjust the width as needed */
     height: auto; /* Maintain the aspect ratio */
     border-radius: 50%; /* Optional: Add a border-radius for a circular image */
 }
-
 
