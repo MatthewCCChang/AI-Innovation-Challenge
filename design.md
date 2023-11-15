@@ -7,3 +7,5 @@ recommendation widgets
 dark mode:
 6A74A9
 #081955
+#FFC7C2
+#AFF4C6
