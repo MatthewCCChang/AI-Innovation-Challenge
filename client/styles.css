@@ -44,14 +44,16 @@ body {
 
 .message {
     margin-bottom: 10px; /* Increase vertical spacing between messages */
+    
 }
 
 .user-message {
-    background-color:  #081955; /* Light blue background for user messages */
+    background-color:  green; /* Light blue background for user messages */
+    display: flex;
     color: white; /* Black text color */
     padding: 10px;
     border-radius: 10px;
-    float: left;
+    float: right;
     clear: both;
   }
 
@@ -150,6 +152,9 @@ button {
     border-radius: 50%; /* Optional: Add a border-radius for a circular image */
 }
 
+.li title{
+    font-size: 23px;
+}
 
 /* Club Info Styles */
 #club {
