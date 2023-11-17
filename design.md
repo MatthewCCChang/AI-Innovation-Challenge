@@ -20,3 +20,10 @@ we should be able to save chats ( maybe set a maximum 5 )
 API connect with assistant ID
 React + Node + express +AWS
 
+
+
+Kai - Authentication Page
+Matthew - API routes
+we need to get a database running to keep track of people 
+need to think about how we will store conversations (new table or an attribute of people)
+make a git-ignore for api key and firebase
