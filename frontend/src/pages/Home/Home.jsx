@@ -134,3 +134,28 @@ export default function Home() {
     )
 };
 
+
+/*
+{
+  "post": "how are you",
+  "assistant_id": "6550193a478ea2e2c5e67e54",
+  "post_metadata": {
+    "additionalProp1": "string",
+    "additionalProp2": "string",
+    "additionalProp3": "string"
+  },
+  "chat_session": "string",
+  "user_identifier": "string"
+}
+
+what youll need:
+api key
+
+a way to change post
+a way to grab response
+
+what to use:
+axios and express? not too sure what these two do
+
+
+*/
