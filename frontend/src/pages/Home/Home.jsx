@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './Home.css';
 import logo from './logo.png';
 import axios from 'axios';
-import { spin } from 'antd';
+import { Spin } from 'antd';
 
 async function sendMessage(message) {
   //const [initialTextVisible, setInitialTextVisible] = useState(true);
@@ -138,7 +138,7 @@ function getMessage(){
   return message;
 }
 
-const DisplayPage = () => {
+function DisplayPage(){
   const [loading, setLoading] = useState(true);
   console.log("pass");
   const [data, setData] = useState(null);
@@ -162,19 +162,7 @@ const DisplayPage = () => {
     fetchData();
   },[])
 
- 
-
-
-
-  if(loading) return (
-    <span>Loading</span>  //change later to display loading component
-  );
-  if (!data) return (
-    <span>Data not available</span>
-  );
-  console.log(data);
-  //here is where you return the <div> and content stuff
-  
+ return loading;
 }
 
 
@@ -234,6 +222,7 @@ axios and express? not too sure what these two do
 
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
   return (<>
 
   <div className={styles.home}>
@@ -259,7 +248,8 @@ export default function Home() {
           onInput={handleInput}
           onKeyDown={handleKeyPress}
         />
-        <button onClick={DisplayPage}>&#9658;</button>
+        <Spin spinning={loading}/>
+        <button onClick={()=>{setLoading(DisplayPage)}}>&#9658;</button>
       </div>
     </div>
   </div>
