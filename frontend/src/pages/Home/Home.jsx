@@ -1,38 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Home.css';
 import logo from './logo.png';
 import axios from 'axios';
+import { spin } from 'antd';
 
-async function sendMessage() {
+async function sendMessage(message) {
   //const [initialTextVisible, setInitialTextVisible] = useState(true);
-  var messageInput = document.getElementById('messageInput');
-  var message = messageInput.value;
-  
   if (message.trim() === '') {
-      return; // Ignore empty messages
-  }
+    return; // Ignore empty messages
+}
 
   const API_KEY = 'WH_9NNJliiak0re29MC__QQE-pY95uYtYd2W88-9pMQ7473';
   const ASSISTANT_ID = '6550193a478ea2e2c5e67e54';
-  
- 
-  
-    try {
-      // Prepare the request payload
-      const payload = {
-        post: message,
-        assistant_id: ASSISTANT_ID,
-        post_metadata: {
-          additionalProp1: 'string',
-          additionalProp2: 'string',
-          additionalProp3: 'string',
-        },
-        chat_session: 'string',
-        user_identifier: 'string',
-      };
-  
-      // Make a POST request to the API endpoint
-      const response = await axios.post('http://localhost:3001/chat', payload, {
+  const endpoint = 'http://localhost:3001/chat';
+  // Prepare the request payload
+  const payload = {
+    post: message,
+    assistant_id: ASSISTANT_ID,
+    post_metadata: {
+      additionalProp1: 'string',
+      additionalProp2: 'string',
+      additionalProp3: 'string',
+    },
+    chat_session: 'string',
+    user_identifier: 'string',
+  };
+  // Make a POST request to the API endpoint
+  const response = await axios.post(endpoint, payload, {
         headers: {
           'accept': 'application/json',
           'Authorization': "WH_9NNJliiak0re29MC__QQE-pY95uYtYd2W88-9pMQ7473",
@@ -40,6 +34,10 @@ async function sendMessage() {
           
         },
       });
+  return response;
+ 
+    /*
+    try {
   
       var chat = document.getElementById('chat');
       var newMessage = document.createElement('div');
@@ -85,7 +83,99 @@ async function sendMessage() {
     } catch (error) {
       console.error(error);
     }
+    */
   }
+
+  function updateUI(response){
+    const message = getMessage();
+    const messageInput = document.getElementById('messageInput');
+    var chat = document.getElementById('chat');
+      var newMessage = document.createElement('div');
+      newMessage.className = 'message userMessage';
+      newMessage.textContent = message;
+      chat.appendChild(newMessage);
+
+      const responseText = response.data.response.response;
+      const responseTime = response.data.response.created_at_response;
+      const knowledgeSourcesIndex = responseText.indexOf('<b>Answer from Knowledge Sources:</b>');
+      const webIndex = responseText.indexOf('<b>Answer from Web:</b>');
+
+      const timeStamp = new Date(responseTime);
+      const timestamp = timeStamp.toLocaleString('en-US', { timeZone: 'America/New_York'});
+      const formattedTime = new Date(timestamp);
+
+      const hours = formattedTime.getHours() + 1; // this might be the worst code ive ever written.
+      const minutes = formattedTime.getMinutes();
+
+      const formattedTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+      const knowledgeSourcesResponse = responseText.substring(
+      knowledgeSourcesIndex + '<b>Answer from Knowledge Sources:</b>'.length,
+      webIndex
+      )
+      
+  
+      // Display the response from the server
+      var serverResponse = document.createElement('div');
+      serverResponse.className = 'message assistantMessage';
+      console.log(response.data.response);
+      serverResponse.innerHTML = `${formattedTimeString}<br><br>${knowledgeSourcesResponse}`;
+      chat.appendChild(serverResponse);
+  
+      messageInput.value = '';
+      messageInput.focus();
+  
+      // Scroll to the bottom after a small delay
+      chat.scrollTo({
+        top: chat.scrollHeight,
+        behavior: 'smooth',
+      });
+  }
+
+function getMessage(){
+  var messageInput = document.getElementById('messageInput');
+  var message = messageInput.value;
+  return message;
+}
+
+const DisplayPage = () => {
+  const [loading, setLoading] = useState(true);
+  console.log("pass");
+  const [data, setData] = useState(null);
+  console.log("no fail?");
+
+  const fetchData = async() => {
+    try{
+      setLoading(true);
+      const data = await sendMessage(getMessage());
+      setData(data);
+      setLoading(false);
+
+      if(data){
+        updateUI(data);
+      }
+    }catch(error){
+      console.error(error);
+    }
+  } 
+  useEffect(() => {
+    fetchData();
+  },[])
+
+ 
+
+
+
+  if(loading) return (
+    <span>Loading</span>  //change later to display loading component
+  );
+  if (!data) return (
+    <span>Data not available</span>
+  );
+  console.log(data);
+  //here is where you return the <div> and content stuff
+  
+}
 
 
 function handleInput() {
@@ -98,7 +188,7 @@ function handleInput() {
 function handleKeyPress(event) {
   // Check if the pressed key is Enter (key code 13)
   if (event.key === "Enter") {
-      sendMessage(); // Call the sendMessage function when Enter is pressed
+      DisplayPage(); // Call the sendMessage function when Enter is pressed
       //initialText.classList.remove("visible");
       //initialText.classList.add("hidden");
 
@@ -169,7 +259,7 @@ export default function Home() {
           onInput={handleInput}
           onKeyDown={handleKeyPress}
         />
-        <button onClick={sendMessage}>&#9658;</button>
+        <button onClick={DisplayPage}>&#9658;</button>
       </div>
     </div>
   </div>
