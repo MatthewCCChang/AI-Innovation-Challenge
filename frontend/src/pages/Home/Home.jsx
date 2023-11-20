@@ -1,73 +1,91 @@
 import React, { useState } from 'react';
 import styles from './Home.css';
 import logo from './logo.png';
+import axios from 'axios';
 
-function sendMessage() {
+async function sendMessage() {
   //const [initialTextVisible, setInitialTextVisible] = useState(true);
-  var messageInput = document.getElementById("messageInput");
+  var messageInput = document.getElementById('messageInput');
   var message = messageInput.value;
-
-
-  if (message.trim() === "") {
+  
+  if (message.trim() === '') {
       return; // Ignore empty messages
   }
 
+  const API_KEY = 'WH_9NNJliiak0re29MC__QQE-pY95uYtYd2W88-9pMQ7473';
+  const ASSISTANT_ID = '6550193a478ea2e2c5e67e54';
+  
  
-  var chatContainer = document.getElementById("chatContainer");
-  var chat = document.getElementById("chat");
-
-  var newMessage = document.createElement("div");
-  newMessage.className = "message userMessage";
-  // newMessage.textContent = "You: " + message;
-  newMessage.textContent = message;
-
-  chat.appendChild(newMessage);
-  messageInput.value = "";
-  messageInput.focus();
-
-  // Display information about "Tomo No Kai" when the user asks about it
-  if (message.toLowerCase().includes("tomo no kai")) {
-      var response = document.createElement("div");
-      response.className = "message assistantMessage";
-      response.id = "club";
-
-      // Add information about the club
-      response.innerHTML = `
-
-          <p>Tomo No Kai is a fantastic club! Here's a brief overview of everything I found. </p>
-          <ul>
-              <b><li class="title">Name: Tomo No Kai</li></b>
-              <li>Tomo No Kai, roughly translating into 'circle of friends', was established on the campus of University of California, Irvine in 1977. We are a cultural and social club that explore the Japanese and Japanese-American cultures. We embody inclusivity and provide an environment where one can find their second home and build everlasting bonds. We strive to teach everyone who is enamored with the Japanese culture with our weekly vocabulary lessons, and our practices and performances of traditional entertainment acts which attempt to portray the Japanese community. Every week we have meetings where we update our general members with events, ongoing programs, and afterwards, we explore the city with our after events by taking the general members out to various locations and food hot spots. Furthermore, we pride ourselves in our involvement with the wider Japanese community through volunteer work and events with the Southern California Nikkei community. Please feel free to reach out to any present cabinet members with any questions or concerns! Don't forget to follow us on our Facebook, Instagram, and Snapchat to see the most current events!</li>
-          <li></li>
-          <li><a href="https://tomonokaiuci.com/about" target="_blank">
-              Website: https://tomonokaiuci.com/about
-          </a>
-      </li>
-          <li><a href="https://discord.com/invite/GBUBMPu" target="_blank"><img src="./img/discord.png" class = "logo" alt="Discord Logo" width="20" height="20"> Discord</a> </li>
-          <li><a href="https://www.instagram.com/tomonokai.uci/" target="_blank"><img src="./img/instagram.jpg" class = "logo" alt="Instagram Logo" width="20" height="20"> Instagram</a> </li>
+  
+    try {
+      // Prepare the request payload
+      const payload = {
+        post: message,
+        assistant_id: ASSISTANT_ID,
+        post_metadata: {
+          additionalProp1: 'string',
+          additionalProp2: 'string',
+          additionalProp3: 'string',
+        },
+        chat_session: 'string',
+        user_identifier: 'string',
+      };
+  
+      // Make a POST request to the API endpoint
+      const response = await axios.post('http://localhost:3001/chat', payload, {
+        headers: {
+          'accept': 'application/json',
+          'Authorization': "WH_9NNJliiak0re29MC__QQE-pY95uYtYd2W88-9pMQ7473",
+          'Content-Type': 'application/json',
           
-              <!-- Add more information as needed -->
-          </ul>
-          
-      `;
+        },
+      });
+  
+      var chat = document.getElementById('chat');
+      var newMessage = document.createElement('div');
+      newMessage.className = 'message userMessage';
+      newMessage.textContent = message;
+      chat.appendChild(newMessage);
 
-      chat.appendChild(response);
-  } else {
-      // Default response for other messages
-      var defaultResponse = document.createElement("div");
-      defaultResponse.className = "message assistantMessage";
-      defaultResponse.textContent = "That's interesting! Tell me more.";
+      const responseText = response.data.response.response;
+      const responseTime = response.data.response.created_at_response;
+      const knowledgeSourcesIndex = responseText.indexOf('<b>Answer from Knowledge Sources:</b>');
+      const webIndex = responseText.indexOf('<b>Answer from Web:</b>');
 
-      chat.appendChild(defaultResponse);
+      const timeStamp = new Date(responseTime);
+      const timestamp = timeStamp.toLocaleString('en-US', { timeZone: 'America/New_York'});
+      const formattedTime = new Date(timestamp);
+
+      const hours = formattedTime.getHours() + 1; // this might be the worst code ive ever written.
+      const minutes = formattedTime.getMinutes();
+
+      const formattedTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+      const knowledgeSourcesResponse = responseText.substring(
+      knowledgeSourcesIndex + '<b>Answer from Knowledge Sources:</b>'.length,
+      webIndex
+      )
+      
+  
+      // Display the response from the server
+      var serverResponse = document.createElement('div');
+      serverResponse.className = 'message assistantMessage';
+      console.log(response.data.response);
+      serverResponse.innerHTML = `${formattedTimeString}<br><br>${knowledgeSourcesResponse}`;
+      chat.appendChild(serverResponse);
+  
+      messageInput.value = '';
+      messageInput.focus();
+  
+      // Scroll to the bottom after a small delay
+      chat.scrollTo({
+        top: chat.scrollHeight,
+        behavior: 'smooth',
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
-
-
-  // Scroll to the bottom after a small delay
-  chat.scrollTo({
-      top: chat.scrollHeight, // Adjust the gap as needed
-      behavior: 'smooth'
-  });
-}
 
 
 function handleInput() {
@@ -98,42 +116,6 @@ function refreshPage() {
 }
 
 
-export default function Home() {
-    return (<>
-        <h1> Home </h1>
-
-    <div className={styles.Home}>
-      <div className={styles.topLeftContainer}>
-      <img src={logo} alt=""/>
-
-        <button onClick={refreshPage}>New Chat</button>
-      </div>
-      <div className={styles.centerText} id="initialText">
-        <p className={styles.subtleText}>TINDER CLUB</p>
-      </div>
-      <div className={styles.chatContainer} id="chatContainer">
-        <div className={styles.chat} id="chat">
-          <div className={styles.recommendations} id="recommendations">
-            <p>Recommendations</p>
-          </div>
-        </div>
-        <div className={styles.inputContainer}>
-          <input
-            type="text"
-            id="messageInput"
-            placeholder="Type your message..."
-            onInput={handleInput}
-            onKeyDown={handleKeyPress}
-          />
-          <button onClick={sendMessage}>&#9658;</button>
-        </div>
-      </div>
-    </div>
-      
-    </>
-    )
-};
-
 
 /*
 {
@@ -159,3 +141,39 @@ axios and express? not too sure what these two do
 
 
 */
+
+
+export default function Home() {
+  return (<>
+
+  <div className={styles.home}>
+    <div className={styles.topLeftContainer}>
+    <img src={logo} alt=""/>
+
+      <button onClick={refreshPage}>New Chat</button>
+    </div>
+    <div className={styles.centerText} id="initialText">
+      <p className={styles.subtleText}>TINDER CLUB</p>
+    </div>
+    <div className={styles.chatContainer} id="chatContainer">
+      <div className={styles.chat} id="chat">
+        <div className={styles.recommendations} id="recommendations">
+          <p>Recommendations</p>
+        </div>
+      </div>
+      <div className={styles.inputContainer}>
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Type your message..."
+          onInput={handleInput}
+          onKeyDown={handleKeyPress}
+        />
+        <button onClick={sendMessage}>&#9658;</button>
+      </div>
+    </div>
+  </div>
+    
+  </>
+  )
+};
