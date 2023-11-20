@@ -3,6 +3,8 @@ import styles from './Home.css';
 import logo from './logo.png';
 import axios from 'axios';
 
+export default function Home() {
+  const [message, setMessage] = useState('');
 async function sendMessage() {
   //const [initialTextVisible, setInitialTextVisible] = useState(true);
   var messageInput = document.getElementById('messageInput');
@@ -143,37 +145,32 @@ axios and express? not too sure what these two do
 */
 
 
-export default function Home() {
-  return (<>
 
-  <div className={styles.home}>
-    <div className={styles.topLeftContainer}>
-    <img src={logo} alt=""/>
+  return (
+    <>
+      <div className={styles.home}>
+        <div className={styles.topLeftContainer}>
+          <img src={logo} alt="" />
 
-      <button onClick={refreshPage}>New Chat</button>
-    </div>
-    <div className={styles.centerText} id="initialText">
-      <p className={styles.subtleText}>TINDER CLUB</p>
-    </div>
-    <div className={styles.chatContainer} id="chatContainer">
-      <div className={styles.chat} id="chat">
-        <div className={styles.recommendations} id="recommendations">
-          <p>Recommendations</p>
+          <button onClick={refreshPage}>New Chat</button>
+        </div>
+
+        <div className={styles.chatContainer} id="chatContainer">
+          <div className={styles.chat} id="chat">
+            {/* Render chat messages here */}
+          </div>
+          <div className={styles.inputContainer}>
+            <input
+              type="text"
+              id="messageInput"
+              placeholder="Type your message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button onClick={sendMessage}>&#9658;</button>
+          </div>
         </div>
       </div>
-      <div className={styles.inputContainer}>
-        <input
-          type="text"
-          id="messageInput"
-          placeholder="Type your message..."
-          onInput={handleInput}
-          onKeyDown={handleKeyPress}
-        />
-        <button onClick={sendMessage}>&#9658;</button>
-      </div>
-    </div>
-  </div>
-    
-  </>
-  )
-};
+    </>
+  );
+}
