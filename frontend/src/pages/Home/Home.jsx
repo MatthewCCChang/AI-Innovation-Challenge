@@ -29,7 +29,7 @@ async function sendMessage(message) {
   const response = await axios.post(endpoint, payload, {
         headers: {
           'accept': 'application/json',
-          'Authorization': "WH_9NNJliiak0re29MC__QQE-pY95uYtYd2W88-9pMQ7473",
+          'Authorization': API_KEY,
           'Content-Type': 'application/json',
           
         },
@@ -84,7 +84,7 @@ async function sendMessage(message) {
       console.error(error);
     }
     */
-  }
+}
 
   function updateUI(response){
     const message = getMessage();
@@ -139,59 +139,53 @@ function getMessage(){
 }
 
 function DisplayPage(){
+  const [data, setData] = useState({});
+  
   const [loading, setLoading] = useState(true);
-  console.log("pass");
-  const [data, setData] = useState(null);
-  console.log("no fail?");
-
-  const fetchData = async() => {
-    try{
-      setLoading(true);
-      const data = await sendMessage(getMessage());
-      setData(data);
-      setLoading(false);
-
-      if(data){
-        updateUI(data);
-      }
-    }catch(error){
-      console.error(error);
-    }
-  } 
   useEffect(() => {
+    
+    console.log("useEffect is running...");
+
+    const fetchData = async () => {
+      
+      try {
+        console.log("fetchData is called...");
+        setLoading(true);
+
+        const message = getMessage();
+        console.log("Message:", message);
+
+        const response = await sendMessage(message);
+        console.log("Response from sendMessage:", response);
+
+        setData(response);
+        setLoading(false);
+
+        if (response) {
+          console.log("Calling updateUI...");
+          updateUI(response);
+        }
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+      }
+    };
+
     fetchData();
-  },[])
+    
+
+    console.log("useEffect is done.");
+
+    // Cleanup function (optional)
+    // return () => {
+    //   console.log("Cleanup function");
+    // };
+  }, []); 
+  
 
  return loading;
 }
 
 
-function handleInput() {
-  // Show or hide the initial text based on whether the input has text
-  var initialText = document.getElementById("initialText");
-
-  return;
-}
-
-function handleKeyPress(event) {
-  // Check if the pressed key is Enter (key code 13)
-  if (event.key === "Enter") {
-      DisplayPage(); // Call the sendMessage function when Enter is pressed
-      //initialText.classList.remove("visible");
-      //initialText.classList.add("hidden");
-
-      // Assuming recommendations is another element you want to hide
-      document.getElementById("recommendations").classList.add("hidden");
-
-      document.getElementById("chatContainer").style.height = "90%";
-
-      document.getElementById("messageInput").focus();
-  }
-}
-
-function refreshPage() {
-  window.location.reload();
-}
 
 
 
@@ -219,10 +213,58 @@ axios and express? not too sure what these two do
 
 
 */
-
+// Add this in node_modules/react-dom/index.js
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const message = getMessage();
+      const response = await sendMessage(message);
+      //console.log(response.response);
+      if (response)
+        updateUI(response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error in fetchData:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []); 
+
+  function handleInput() {
+    // Show or hide the initial text based on whether the input has text
+    var initialText = document.getElementById("initialText");
+  
+    return;
+  }
+  
+  function handleKeyPress(event) {
+    // Check if the pressed key is Enter (key code 13)
+    if (event.key === "Enter") {
+       fetchData();
+        // Call the sendMessage function when Enter is pressed
+        //initialText.classList.remove("visible");
+        //initialText.classList.add("hidden");
+  
+        // Assuming recommendations is another element you want to hide
+        document.getElementById("recommendations").classList.add("hidden");
+  
+        document.getElementById("chatContainer").style.height = "90%";
+  
+        document.getElementById("messageInput").focus();
+         
+    }
+  }
+  
+  function refreshPage() {
+    window.location.reload();
+  }
+  
   return (<>
 
   <div className={styles.home}>
@@ -249,7 +291,7 @@ export default function Home() {
           onKeyDown={handleKeyPress}
         />
         <Spin spinning={loading}/>
-        <button onClick={()=>{setLoading(DisplayPage)}}>&#9658;</button>
+        <button onClick={fetchData}>&#9658;</button>
       </div>
     </div>
   </div>
