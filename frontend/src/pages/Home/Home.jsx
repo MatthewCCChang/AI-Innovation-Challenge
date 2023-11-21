@@ -35,55 +35,6 @@ async function sendMessage(message) {
         },
       });
   return response;
- 
-    /*
-    try {
-  
-      var chat = document.getElementById('chat');
-      var newMessage = document.createElement('div');
-      newMessage.className = 'message userMessage';
-      newMessage.textContent = message;
-      chat.appendChild(newMessage);
-
-      const responseText = response.data.response.response;
-      const responseTime = response.data.response.created_at_response;
-      const knowledgeSourcesIndex = responseText.indexOf('<b>Answer from Knowledge Sources:</b>');
-      const webIndex = responseText.indexOf('<b>Answer from Web:</b>');
-
-      const timeStamp = new Date(responseTime);
-      const timestamp = timeStamp.toLocaleString('en-US', { timeZone: 'America/New_York'});
-      const formattedTime = new Date(timestamp);
-
-      const hours = formattedTime.getHours() + 1; // this might be the worst code ive ever written.
-      const minutes = formattedTime.getMinutes();
-
-      const formattedTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-      const knowledgeSourcesResponse = responseText.substring(
-      knowledgeSourcesIndex + '<b>Answer from Knowledge Sources:</b>'.length,
-      webIndex
-      )
-      
-  
-      // Display the response from the server
-      var serverResponse = document.createElement('div');
-      serverResponse.className = 'message assistantMessage';
-      console.log(response.data.response);
-      serverResponse.innerHTML = `${formattedTimeString}<br><br>${knowledgeSourcesResponse}`;
-      chat.appendChild(serverResponse);
-  
-      messageInput.value = '';
-      messageInput.focus();
-  
-      // Scroll to the bottom after a small delay
-      chat.scrollTo({
-        top: chat.scrollHeight,
-        behavior: 'smooth',
-      });
-    } catch (error) {
-      console.error(error);
-    }
-    */
   }
 
   function updateUI(response){
