@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import styles from './Home.css';
+import { Form, Image, Input, Button, Typography, Alert, Spin, Space } from 'antd';
+import styles from './Home.module.css';
+import './Home.css';
 import logo from './logo.png';
 import axios from 'axios';
-import { Spin } from 'antd';
 
 async function sendMessage(message) {
+  
   //const [initialTextVisible, setInitialTextVisible] = useState(true);
   if (message.trim() === '') {
     return; // Ignore empty messages
@@ -87,13 +89,15 @@ async function sendMessage(message) {
   }
 
   function updateUI(response){
+    
     const message = getMessage();
     const messageInput = document.getElementById('messageInput');
     var chat = document.getElementById('chat');
       var newMessage = document.createElement('div');
-      newMessage.className = 'message userMessage';
+      newMessage.className='message userMessage'
       newMessage.textContent = message;
       chat.appendChild(newMessage);
+      
 
       const responseText = response.data.response.response;
       const responseTime = response.data.response.created_at_response;
@@ -110,7 +114,7 @@ async function sendMessage(message) {
       const formattedTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 
       console.log(knowledgeSourcesIndex);
-      const knowledgeSourcesResponse = (knowledgeSourcesIndex != -1) ? responseText.substring(
+      const knowledgeSourcesResponse = (knowledgeSourcesIndex !== -1) ? responseText.substring(
       knowledgeSourcesIndex + '<b>Answer from Knowledge Sources:</b>'.length,
       webIndex
       ) : responseText;
@@ -253,9 +257,9 @@ export default function Home() {
         //initialText.classList.add("hidden");
   
         // Assuming recommendations is another element you want to hide
-        document.getElementById("recommendations").classList.add("hidden");
+        document.querySelector(".centerText").classList.add("hidden");
   
-        document.getElementById("chatContainer").style.height = "90%";
+        document.getElementById("chat").style.height = "100%";
   
         document.getElementById("messageInput").focus();
          
@@ -269,30 +273,30 @@ export default function Home() {
   return (<>
 
   <div className={styles.home}>
-    <div className={styles.topLeftContainer}>
-    <img src={logo} alt=""/>
 
-      <button onClick={refreshPage}>New Chat</button>
+    <div className={styles.topLeftContainer}>
+    <Image src={logo} width={200} preview={false} alt=""/>
+
+    
     </div>
-    <div className={styles.centerText} id="initialText">
-      <p className={styles.subtleText}>TINDER CLUB</p>
+    <div className='centerText'>
+      <p className='subtleText'>TINDER CLUB</p>
     </div>
-    <div className={styles.chatContainer} id="chatContainer">
-      <div className={styles.chat} id="chat">
-        <div className={styles.recommendations} id="recommendations">
-          <p>Recommendations</p>
-        </div>
+    <Button className='newChat' onClick={refreshPage}>New Chat</Button>
+    <div className='chatContainer' id="chatContainer">
+      <div className='chat' id="chat">
+
       </div>
       <div className={styles.inputContainer}>
-        <input
+        <Input
           type="text"
           id="messageInput"
           placeholder="Type your message..."
           onInput={handleInput}
           onKeyDown={handleKeyPress}
         />
-        <Spin spinning={loading}/>
-        <button onClick={fetchData}>&#9658;</button>
+        <Spin className={styles.spinIcon} spinning={loading}/>
+        <Button className={styles.submit} onClick={fetchData}>&#9658;</Button>
       </div>
     </div>
   </div>
