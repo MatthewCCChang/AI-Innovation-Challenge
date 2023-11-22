@@ -34,7 +34,7 @@ const SignIn = () => {
             (userCredential) => {
                 
                 console.log(userCredential);
-                return <Navigate to="/Home"/>;})
+                navigate('/Home');})
             .catch((error) => {
             console.log(error);
         });
