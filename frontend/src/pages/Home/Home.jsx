@@ -109,10 +109,11 @@ async function sendMessage(message) {
 
       const formattedTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 
-      const knowledgeSourcesResponse = responseText.substring(
+      console.log(knowledgeSourcesIndex);
+      const knowledgeSourcesResponse = (knowledgeSourcesIndex != -1) ? responseText.substring(
       knowledgeSourcesIndex + '<b>Answer from Knowledge Sources:</b>'.length,
       webIndex
-      )
+      ) : responseText;
       
   
       // Display the response from the server
