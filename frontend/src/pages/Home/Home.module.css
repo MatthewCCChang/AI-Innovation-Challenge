@@ -23,9 +23,13 @@ body {
 }
 
   
-  
-  
- 
+
+
+.inputContainer {
+  display: flex;
+  padding: 10px;
+  background-color: #eee;
+}
 
   
   .inputContainer {
@@ -61,8 +65,6 @@ body {
   
 
  
-  
-  /* Club Info Styles */
   #club {
     justify-content: center;
     line-height: 1.5;

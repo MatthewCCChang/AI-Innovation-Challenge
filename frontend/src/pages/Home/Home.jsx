@@ -89,54 +89,6 @@ async function sendMessage(message) {
     */
   }
 
-  function updateUI(response){
-    
-    const message = getMessage();
-    const messageInput = document.getElementById('messageInput');
-    var chat = document.getElementById('chat');
-      var newMessage = document.createElement('div');
-      newMessage.className='message userMessage'
-      newMessage.textContent = message;
-      chat.appendChild(newMessage);
-      
-
-      const responseText = response.data.response.response;
-      const responseTime = response.data.response.created_at_response;
-      const knowledgeSourcesIndex = responseText.indexOf('<b>Answer from Knowledge Sources:</b>');
-      const webIndex = responseText.indexOf('<b>Answer from Web:</b>');
-
-      const timeStamp = new Date(responseTime);
-      const timestamp = timeStamp.toLocaleString('en-US', { timeZone: 'America/New_York'});
-      const formattedTime = new Date(timestamp);
-
-      const hours = formattedTime.getHours() + 1; // this might be the worst code ive ever written.
-      const minutes = formattedTime.getMinutes();
-
-      const formattedTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-      console.log(knowledgeSourcesIndex);
-      const knowledgeSourcesResponse = (knowledgeSourcesIndex !== -1) ? responseText.substring(
-      knowledgeSourcesIndex + '<b>Answer from Knowledge Sources:</b>'.length,
-      webIndex
-      ) : responseText;
-      
-  
-      // Display the response from the server
-      var serverResponse = document.createElement('div');
-      serverResponse.className = 'message assistantMessage';
-      console.log(response.data.response);
-      serverResponse.innerHTML = `${formattedTimeString}<br><br>${knowledgeSourcesResponse}`;
-      chat.appendChild(serverResponse);
-  
-      messageInput.value = '';
-      messageInput.focus();
-  
-      // Scroll to the bottom after a small delay
-      chat.scrollTo({
-        top: chat.scrollHeight,
-        behavior: 'smooth',
-      });
-  }
 
 function getMessage(){
   var messageInput = document.getElementById('messageInput');
@@ -144,6 +96,7 @@ function getMessage(){
   return message;
 }
 
+/*
 function DisplayPage(){
   const [data, setData] = useState({});
   
@@ -190,7 +143,7 @@ function DisplayPage(){
 
  return loading;
 }
-
+*/
 
 
 
@@ -222,8 +175,82 @@ axios and express? not too sure what these two do
 // Add this in node_modules/react-dom/index.js
 
 export default function Home() {
+  const [likeVisible, setLikeVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+
+  function updateUI(response){
+    
+    const message = getMessage();
+    const messageInput = document.getElementById('messageInput');
+    var chat = document.getElementById('chat');
+      var newMessage = document.createElement('div');
+      newMessage.className='message userMessage'
+      newMessage.textContent = message;
+      chat.appendChild(newMessage);
+      
+
+      const responseText = response.data.response.response;
+      const responseTime = response.data.response.created_at_response;
+      const knowledgeSourcesIndex = responseText.indexOf('<b>Answer from Knowledge Sources:</b>');
+      const webIndex = responseText.indexOf('<b>Answer from Web:</b>');
+
+      const timeStamp = new Date(responseTime);
+      const timestamp = timeStamp.toLocaleString('en-US', { timeZone: 'America/New_York'});
+      const formattedTime = new Date(timestamp);
+
+      const hours = formattedTime.getHours() + 1; // this might be the worst code ive ever written.
+      const minutes = formattedTime.getMinutes();
+
+      const formattedTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+      
+
+      console.log(knowledgeSourcesIndex);
+      const knowledgeSourcesResponse = (knowledgeSourcesIndex !== -1) ? responseText.substring(
+      knowledgeSourcesIndex + '<b>Answer from Knowledge Sources:</b>'.length,
+      webIndex
+      ) : responseText;
+      
+  
+      // Display the response from the server
+      var serverResponse = document.createElement('div');
+      serverResponse.className = 'message assistantMessage';
+      console.log(response.data.response);
+      serverResponse.innerHTML = `${formattedTimeString}<br><br>${knowledgeSourcesResponse}`;
+      
+
+      chat.appendChild(serverResponse);
+
+      if (likeVisible) {
+        var likeButton = document.createElement('Button');
+        likeButton.className = 'likeButton';
+      
+        // Use JSX syntax to create the heart icon element
+        likeButton.innerHTML ="&#10084;";
+      
+        likeButton.addEventListener('click', () => {
+          handleLike(likeButton);
+          setLikeVisible(false); // Move setLikeVisible(false) inside handleLike if needed
+        });
+      
+        likeButton.classList.add('hoverable');
+        chat.appendChild(likeButton);
+      }
+
+      
+      
+  
+      messageInput.value = '';
+      messageInput.focus();
+  
+      // Scroll to the bottom after a small delay
+      chat.scrollTo({
+        top: chat.scrollHeight,
+        behavior: 'smooth',
+      });
+  }
 
   const fetchData = async () => {
     try {
@@ -231,8 +258,15 @@ export default function Home() {
       const message = getMessage();
       const response = await sendMessage(message);
       //console.log(response.response);
-      if (response)
+      if (response) {
+        if (response.data.response.response.includes('club') || response.data.response.response.includes('clubs') || response.data.response.response.includes('Club') || response.data.response.response.includes('Clubs')) {
+          setLikeVisible(true);  // Set like button visibility to true
+        } else {
+          setLikeVisible(false); // Set like button visibility to false
+        }
         updateUI(response);
+        
+      }
       setLoading(false);
     } catch (error) {
       console.error("Error in fetchData:", error);
@@ -252,6 +286,11 @@ export default function Home() {
     var initialText = document.getElementById("initialText");
   
     return;
+  }
+
+  function handleLike(likeButton) {
+    // Toggle the liked state
+    likeButton.classList.toggle('liked');
   }
   
   function handleKeyPress(event) {
@@ -275,6 +314,8 @@ export default function Home() {
   function refreshPage() {
     window.location.reload();
   }
+
+  
   
   return (<>
 

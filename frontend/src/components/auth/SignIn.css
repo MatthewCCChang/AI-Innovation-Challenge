@@ -7,15 +7,13 @@
   
 .sign-in-form {
     width: 300px;
-    margin-left: 11vh;
     text-align: left; 
 }
 
 .sign-up-form {
     width: 300px;
-    margin: 0 20px;
     text-align: left;
-    margin-left: 4vh;
+    margin-left: 10vh;
 }
 
 .vertical-line {
