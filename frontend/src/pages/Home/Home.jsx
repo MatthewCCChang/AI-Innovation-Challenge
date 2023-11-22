@@ -4,6 +4,7 @@ import styles from './Home.module.css';
 import './Home.css';
 import logo from './logo.png';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 
 async function sendMessage(message) {
   
@@ -222,6 +223,7 @@ axios and express? not too sure what these two do
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -240,6 +242,10 @@ export default function Home() {
   useEffect(() => {
     fetchData();
   }, []); 
+
+  function exitPage() {
+     navigate('/SignIn');
+  }
 
   function handleInput() {
     // Show or hide the initial text based on whether the input has text
@@ -283,6 +289,7 @@ export default function Home() {
       <p className='subtleText'>TINDER CLUB</p>
     </div>
     <Button className='newChat' onClick={refreshPage}>New Chat</Button>
+    <Button className={styles.exit} onClick={exitPage}>Exit</Button>
     <div className='chatContainer' id="chatContainer">
       <div className='chat' id="chat">
 

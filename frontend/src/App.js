@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         
-        <Route index element = {<SignIn />} />
+        <Route index path='/SignIn' element = {<SignIn />} />
         <Route element = {<AuthDetails />} />
         <Route path='/Home' element={<Home />} />
       </Routes>
